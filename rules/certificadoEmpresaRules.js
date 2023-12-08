@@ -36,55 +36,47 @@ function levenshteinDistance(a, b) {
 }
 
 // Crear un nuevo motor de reglas
-let facturaEngine = new Engine();
+let certificadoEmpresaEngine = new Engine();
 
 // Agregar un operador personalizado para comprobar la similitud
-facturaEngine.addOperator('similarTo', (factValue, jsonValue) => {
+certificadoEmpresaEngine.addOperator('similarTo', (factValue, jsonValue) => {
     const distance = levenshteinDistance(factValue, jsonValue.value);
     const similarity = (1 - distance / Math.max(factValue.length, jsonValue.value.length));
     return similarity >= jsonValue.threshold;
 });
 
 // Definir la regla usando el operador personalizado
-facturaEngine.addRule({
-    conditions: {
-        any: [{
-            fact: 'nombre1',
-            operator: 'similarTo',
-            value: {
-                value: 'agencia boliviana de energía nuclear', // valor esperado
-                threshold: 0.5 // umbral de similitud, ajustar según sea necesario
-            }
-        },{
-            fact: 'nombre2',
-            operator: 'similarTo',
-            value: {
-                value: 'agencia boliviana de energía nuclear', // valor esperado
-                threshold: 0.5 // umbral de similitud, ajustar según sea necesario
-            }
-        }]
-    },
-    event: {
-        type: 'validado',
-        params: {
-            message: 'El nombre es similar al esperado y está validado.'
-        }
-    }
-});
-facturaEngine.addRule({
+certificadoEmpresaEngine.addRule({
     conditions: {
         all: [{
-            fact: 'anoFactura',
+            fact: 'nombreAgencia',
+            operator: 'similarTo',
+            value: {
+                value: 'agemed',
+                threshold: 0.5
+            }
+        },{
+            fact: 'anoCertificado',
             operator: 'equal',
             value: '2023'
+        },       
+        
+        {
+            fact: 'tituloCertificado',
+            operator: 'similarTo',
+            value: {
+                value: 'certificado de empresa',
+                threshold: 0.5
+            }
         }]
     },
     event: {
-        type: 'fecha-validada',
+        type: 'validacion-completa',
         params: {
-            message: 'La fecha de la factura es del año 2023.'
+            message: 'El certificado tiene una similitud suficiente con los datos esperados para el año 2023.'
         }
     }
 });
 
-module.exports = { facturaEngine };
+
+module.exports = { certificadoEmpresaEngine };

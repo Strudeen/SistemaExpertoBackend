@@ -31,11 +31,10 @@ const putDocumento = async (req = request, res = response) => {
         if (!documento) {
             return res.status(404).json({ msg: 'Documento no encontrado' });
         }
-
         documento.codigo = codigo;
         documento.validacion = validacion;
         documento.fotoURL = fotoURL;
- 
+
         await documento.save();
 
         res.json({
@@ -44,7 +43,6 @@ const putDocumento = async (req = request, res = response) => {
         });
 
     } catch (error) {
-
         console.error(error);
         res.status(500).json({ msg: 'Error al actualizar el documento.' });
     }

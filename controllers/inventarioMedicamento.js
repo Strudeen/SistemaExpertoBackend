@@ -6,11 +6,8 @@ const Inventarios = require('../models/inventarios');
 const getInventariosMedicamentos = async (req = request, res = response) => {
     try{
         const inventarioId = req.params.id;
-        console.log(inventarioId)
         const inventarioMedicamento = await Inventarios.findOne({ _id: inventarioId });
-        console.log(inventarioMedicamento);
         await inventarioMedicamento.populate('datos');
-        console.log(inventarioMedicamento.populated('datos'));
         const {datos} = inventarioMedicamento
         res.json(inventarioMedicamento);
     } catch (error) {
@@ -54,8 +51,6 @@ const postInventarioMedicamento = async (req, res) => {
             return res.status(404).json({ msg: 'Inventario no encontrado' });
         }
 
-        console.log('Inventario actual:', inventario);
-        console.log('ID del Inventario:', inventarioId);
 
 
         const inventarioMedicamento = new InventarioMedicamentos({
@@ -72,7 +67,7 @@ const postInventarioMedicamento = async (req, res) => {
 
         inventario.datos.push(inventarioMedicamento._id);
 
-        inventario.cantidad += cantidad;
+        inventario.cantidad += parseInt(cantidad);
 
         await inventario.save();
 

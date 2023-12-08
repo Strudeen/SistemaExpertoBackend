@@ -15,7 +15,7 @@ const PacientesSchema = Schema({
         type: Date
     },
     sexo: {
-        type: Boolean
+        type: String
     },
     ci: {
         type: String,

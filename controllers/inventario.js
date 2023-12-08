@@ -7,9 +7,7 @@ const getInventario = async (req = request, res = response) => {
     
     try{
         const inventarioId = req.params.id;
-        console.log(inventarioId);
         const inventarios = await Inventario.findOne({ _id:inventarioId });
-        console.log(inventarios);
         res.json(inventarios);
     } catch (error) {
         console.error(error);

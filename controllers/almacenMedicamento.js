@@ -5,11 +5,8 @@ const mongoose = require('mongoose');
 
 const getAlmacenesMedicamentos = async (req = request, res = response) => {
     const almacenId = req.params.id;
-    console.log(almacenId)
     const almacenMedicamento = await Almacen.findOne({  state:true,_id: almacenId  });
-    console.log(almacenMedicamento);
     await almacenMedicamento.populate('datos');
-    console.log(almacenMedicamento.populated('datos'));
     const {datos} = almacenMedicamento
     res.json(almacenMedicamento);
 }
@@ -19,6 +16,17 @@ const getAllAlmacenesMedicamentos = async (req = request, res = response) => {
     const almacenMedicamento = await Almacen.findOne({ _id: almacenId }).populate('AlmacenMedicamentos');
     const {datos} = almacenMedicamento
     res.json(datos);
+}
+const getAlmacenMedicamento = async (req = request, res = response) => {
+    try {
+        const almacenId = req.params.id;
+        const almacenoMedicamentos = await AlmacenMedicamento.findOne({ state:true, _id: almacenId });
+        res.json(almacenoMedicamentos);
+    } catch (error) {
+        res.status(404).json({ msg: 'Almacen Medicamento no encontrado' });
+        console.log({ msg: 'Hubo un error', error});
+    }
+
 }
 
 const postAlmacenMedicamento = async (req, res) => {
@@ -153,4 +161,4 @@ const delAlmacenMedicamento = async (req, res) => {
 }
 
 
-module.exports = { getAlmacenesMedicamentos, getAllAlmacenesMedicamentos, postAlmacenMedicamento, putAlmacenMedicamento, delAlmacenMedicamento };
+module.exports = { getAlmacenesMedicamentos,getAlmacenMedicamento, getAllAlmacenesMedicamentos, postAlmacenMedicamento, putAlmacenMedicamento, delAlmacenMedicamento };

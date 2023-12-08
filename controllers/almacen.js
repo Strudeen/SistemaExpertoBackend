@@ -28,7 +28,7 @@ const getAllAlmacenes = async (req = request, res = response) => {
 const getAlmacen = async (req = request, res = response) => {
     try {
         const almacenId = req.params.id
-        const almacenes = await Almacen.findOne({ almacenId });
+        const almacenes = await Almacen.findById(almacenId);
         res.json(almacenes);
     } catch (error) {
         res.status(404).json({
@@ -39,11 +39,12 @@ const getAlmacen = async (req = request, res = response) => {
 }
 
 const postAlmacen = async (req = request, res = response) => {
-    const { codigoMedicamento, cantidad } = req.body;
+    const { codigoMedicamento } = req.body;
     const almacen = new Almacen({
         _id: new mongoose.Types.ObjectId(),
         codigoMedicamento, cantidad: 0
     })
+    
     await almacen.save();
     res.status(201).json({
         msg: 'Almacen añadido exitosamente.',
@@ -105,4 +106,4 @@ const delAlmacen = async (req = request, res = response) => {
 }
 
 
-module.exports = { getAlmacenes, getAllAlmacenes, postAlmacen, putAlmacen, delAlmacen };
+module.exports = { getAlmacenes, getAlmacen, getAllAlmacenes, postAlmacen, putAlmacen, delAlmacen };

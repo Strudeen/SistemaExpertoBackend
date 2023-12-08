@@ -8,6 +8,12 @@ const getRecetas = async (req = request, res = response) => {
 
     res.json(recetas);
 }
+const getReceta = async (req = request, res = response) => {
+    const idReceta = req.params.id;
+    const recetas = await Recetas.findById(idReceta);
+
+    res.json(recetas);
+}
 
 const postReceta = async (req = request, res = response) => {
 
@@ -25,12 +31,12 @@ const postReceta = async (req = request, res = response) => {
 
     try {
         //
-
+        let index = 0;
         // Recorrer los medicamentos de la receta y actualizar el inventario
         for (const medicamentoReceta of diagnosticoMedicamentos) {
             const codigoMedicamento = medicamentoReceta.codigoMedicamento;
             let cantidadEntregada = medicamentoReceta.cantidadEntregada;
-            let index = 0;
+            
 
             // Buscar el medicamento en el inventario
             let inventarioMedicamento = await Inventarios.findOne({ codigoMedicamento }).populate('datos');
@@ -41,11 +47,9 @@ const postReceta = async (req = request, res = response) => {
                 // Restar la cantidad entregada y actualizar InventarioMedicamentos
                 for (let dato of inventarioMedicamento.datos) {
                     let inventarioMedicamentoLista = await InventarioMedicamentos.findById(dato._id);
-                    console.log('INVENTARIOLISTA', inventarioMedicamentoLista);
                     if (inventarioMedicamentoLista.cantidad >= cantidadEntregada) {
                         inventarioMedicamentoLista.cantidad -= cantidadEntregada;
                         recetas.diagnosticoMedicamentos[index].medicamentosEntregados.push({ inventarioMedicamentoId: inventarioMedicamentoLista._id, cantidadMedicamentoEntregada: cantidadEntregada });
-                        console.log('DIAGNOSTICOMEDICAMENTOSMODIFICADOS', recetas.diagnosticoMedicamentos[index].medicamentosEntregados);
                         await inventarioMedicamentoLista.save();
                         break;
                     } else {
@@ -107,14 +111,14 @@ const postReceta = async (req = request, res = response) => {
 
 const putReceta = async (req = request, res = response) => {
     const idReceta = req.params.id;
-    const { tipoReceta, fechaReceta, ciPaciente, diagnostico, diagnosticoMedicamentosModificados, fotoURL } = req.body;
+    const { tipoReceta, fechaReceta, ciPaciente, diagnostico, diagnosticoMedicamentos, fotoURL } = req.body;
 
     const recetas = new Recetas({
         tipoReceta,
         fechaReceta,
         ciPaciente,
         diagnostico,
-        diagnosticoMedicamentos:diagnosticoMedicamentosModificados,
+        diagnosticoMedicamentos:diagnosticoMedicamentos,
         fotoURL
     });
 
@@ -133,14 +137,13 @@ const putReceta = async (req = request, res = response) => {
         for (const medicamentoOriginal of recetaOriginal.diagnosticoMedicamentos) {
             for (const medicamentoEntregado of medicamentoOriginal.medicamentosEntregados) {
                 const inventarioMed = await InventarioMedicamentos.findById(medicamentoEntregado.inventarioMedicamentoId);
-                console.log('INVENTARIOMED', inventarioMed);
                 inventarioMed.cantidad += medicamentoEntregado.cantidadMedicamentoEntregada;
                 await inventarioMed.save();
             }
         }
 
         // Actualiza las cantidades con los nuevos datos
-        for (const medicamentoReceta of diagnosticoMedicamentosModificados) {
+        for (const medicamentoReceta of diagnosticoMedicamentos) {
             const codigoMedicamento = medicamentoReceta.codigoMedicamento;
             let cantidadEntregada = medicamentoReceta.cantidadEntregada;
             let index = 0;
@@ -155,19 +158,14 @@ const putReceta = async (req = request, res = response) => {
                 for (let dato of inventarioMedicamento.datos) {
                     const inventarioMedicamentoLista = await InventarioMedicamentos.findById(dato._id);
             
-                    console.log('INVENTARIOMEDICAMENTOLISTA_ID', inventarioMedicamentoLista);
                     if (inventarioMedicamentoLista.cantidad >= cantidadEntregada) {
                         inventarioMedicamentoLista.cantidad -= cantidadEntregada;
                         recetas.diagnosticoMedicamentos[index].medicamentosEntregados.push({ inventarioMedicamentoId: inventarioMedicamentoLista._id, cantidadMedicamentoEntregada: cantidadEntregada });
-                        console.log('DIAGNOSTICOMEDICAMENTOSMODIFICADOS',  recetas.diagnosticoMedicamentos[index]);
-                        console.log('DIAGNOSTICOMEDICAMENTOSMODIFICADOS',  recetas.diagnosticoMedicamentos[index].medicamentosEntregados);
                         await inventarioMedicamentoLista.save();
                         break;
                     } else {
                         cantidadEntregada -= inventarioMedicamentoLista.cantidad;
                         recetas.diagnosticoMedicamentos[index].medicamentosEntregados.push({ inventarioMedicamentoId: inventarioMedicamentoLista._id, cantidadMedicamentoEntregada: inventarioMedicamentoLista.cantidad });
-                        console.log('DIAGNOSTICOMEDICAMENTOSMODIFICADOS',  recetas.diagnosticoMedicamentos[index]);
-                        console.log('DIAGNOSTICOMEDICAMENTOSMODIFICADOS',  recetas.diagnosticoMedicamentos[index].medicamentosEntregados);
                         inventarioMedicamentoLista.cantidad = 0;
                         
                         await inventarioMedicamentoLista.save();
@@ -179,7 +177,6 @@ const putReceta = async (req = request, res = response) => {
                 inventarioMedicamento = await Inventarios.findOne({ codigoMedicamento }).populate('datos');
                 for (let dato of inventarioMedicamento.datos) {
                     cantidadTotal += dato.cantidad;
-                    console.log('CANTIDAD TOTAL',cantidadTotal);
                 }
 
                 // Actualizar la cantidad en Inventarios
@@ -197,11 +194,7 @@ const putReceta = async (req = request, res = response) => {
         recetaOriginal.diagnosticoMedicamentos = recetas.diagnosticoMedicamentos;
         recetaOriginal.fotoURL = recetas.fotoURL;
         
-        console.log("RECETAORIGINAL",recetaOriginal);
-        console.log("RECETAORIGINALDIAGNOSTICO",recetaOriginal.diagnosticoMedicamentos);
-        console.log("RECETAORIGINAMEDICAMENTOS",recetaOriginal.diagnosticoMedicamentos[0].medicamentosEntregados);
         await recetaOriginal.save();
-        console.log(recetaOriginal)
 
         res.json({ msg: 'Receta actualizada', receta: recetaOriginal });
     } catch (error) {
@@ -249,4 +242,4 @@ const delDocumento = async (req = request, res = response) => {
 }
 
 
-module.exports = { getRecetas, postReceta, putReceta, delDocumento, getDocumento };
+module.exports = { getRecetas,getReceta, postReceta, putReceta, delDocumento, getDocumento };

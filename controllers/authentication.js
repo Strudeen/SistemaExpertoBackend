@@ -16,7 +16,7 @@ const signIn = async (req, res) => {
         } else {
             if (bcrypt.compareSync(password, user.password)) {
                 // Desestructurar el usuario quitando el Password
-                const { usuarioPassword, ...usuario } = user.toObject(); // En Mongoose usamos toObject()
+                const { password, ...usuario } = user.toObject(); // En Mongoose usamos toObject()
                 
                 // Se crea el Token
                 let token = jwt.sign({ user: usuario }, authConfig.secret, {
@@ -62,7 +62,7 @@ const profileIn = async (req, res, next) => {
         const decoded = jwt.verify(token, authConfig.secret);
         res.json(decoded);
 
-         next();  //Eliminar si no hay más middleware a ejecutar después
+         next();  
     }
     catch (error) {
         console.error(error);

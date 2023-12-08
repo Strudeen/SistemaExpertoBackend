@@ -1,9 +1,10 @@
 const { Router } = require('express');
-const { getRecetas, postReceta, putReceta} = require('../controllers/receta');
+const { getRecetas, postReceta, putReceta,getReceta} = require('../controllers/receta');
 
 const router = Router();
 router.get('/', getRecetas);
-router.put('/:id', putReceta)
+router.get('/:id', getReceta);
+router.put('/:id', putReceta);
 router.post('/', postReceta);
 
 
