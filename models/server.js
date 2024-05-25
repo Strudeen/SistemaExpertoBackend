@@ -47,6 +47,7 @@ class Server {
         this.app.use(this.routesPath + '/pedidosInventario', require('../routes/pedidosInventario'));
         this.app.use(this.routesPath + '/pedidosAlmacen', require('../routes/pedidosAlmacen'));
         this.app.use(this.routesPath + '/compras', require('../routes/compras'));
+        this.app.use(this.routesPath + '/alertasAlmacen', require('../routes/alertasAlmacen'));
     }
 
 }
