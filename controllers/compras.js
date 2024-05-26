@@ -39,13 +39,13 @@ const postCompra = async (req = request, res = response) => {
         if (!almacen) {
             const newAlmacen = new Almacen({
                 codigoMedicamento: med.codigoMedicamento,
-                cantidad: med.cantidad,
+                cantidad: parseInt(med.cantidad),
                 state: true,
                 _id: new mongoose.Types.ObjectId(),
             });
             almacen = await newAlmacen.save();
         } else {
-            almacen.cantidad += med.cantidad;
+            almacen.cantidad = parseInt(almacen.cantidad) + parseInt(med.cantidad);
         }
 
         const newAlmacenMedicamento = new AlmacenMedicamento({
@@ -58,7 +58,7 @@ const postCompra = async (req = request, res = response) => {
             _id: new mongoose.Types.ObjectId(),
         });
         almacen.datos.push(newAlmacenMedicamento._id);
-        precioTotal += med.cantidad * med.precioUnitario;
+        precioTotal += parseInt(med.cantidad) * parseFloat(med.precioUnitario);
         medicamento[index].idMedicamentoAlmacen = newAlmacenMedicamento._id;
         await newAlmacenMedicamento.save();
         await almacen.save();

@@ -19,7 +19,7 @@ const signIn = async (req, res) => {
                 const { password, ...usuario } = user.toObject(); // En Mongoose usamos toObject()
                 
                 // Se crea el Token
-                let token = jwt.sign({ user: usuario }, authConfig.secret, {
+                let token = jwt.sign({ user: usuario  }, authConfig.secret, {
                     expiresIn: authConfig.expires
                 });
 
