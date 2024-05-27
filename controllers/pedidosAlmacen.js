@@ -58,6 +58,7 @@ const actualizarEstadoPedido = async (req, res) => {
                     fechaCaducidad: detallesMedicamento.fechaCaducidad,
                     codigoLaboratorio: detallesMedicamento.codigoLaboratorio,
                     cantidad: cantidadEntregada,
+                    cantidadInicial: cantidadEntregada,
                     nroLote: detallesMedicamento.nroLote,
                     state: true,
                     inventarios: inventario._id

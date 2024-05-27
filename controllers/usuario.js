@@ -44,7 +44,7 @@ const putUsuario = async (req = request, res = response) => {
         usuario.nombre = nombre;
         usuario.apellido = apellido;
         usuario.email = email;
-        usuario.password = password;
+       // usuario.password = password;
         usuario.rol = rol;
         usuario.sexo = sexo;
         usuario.ci = ci;

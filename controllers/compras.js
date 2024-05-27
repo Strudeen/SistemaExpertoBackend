@@ -52,6 +52,7 @@ const postCompra = async (req = request, res = response) => {
             fechaCaducidad: med.fechaCaducidad,
             codigoLaboratorio: med.codigoLaboratorio,
             cantidad: med.cantidad,
+            cantidadInicial: med.cantidad,
             nroLote: med.nroLote,
             state: true,
             almacen: almacen._id,
