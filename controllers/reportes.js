@@ -15,25 +15,30 @@ const getReporteMesInventario = async (req = request, res = response) => {
                 $gte: inicio,
                 $lte: final,
             },
-            almacen: {
-                $in: medicamentos
+            // almacen: {
+            //     $in: medicamentos
+            // }
+        }).populate('almacen');
+
+       
+
+        const groupedByAlmacen = medicamentosList.reduce((acc, item) => {
+            const { almacen, cantidad, cantidadInicial } = item;
+            acc[almacen.codigoMedicamento] = acc[almacen.codigoMedicamento] || { cantidad: 0, cantidadInicial: 0 };
+            acc[almacen.codigoMedicamento].cantidad += cantidad;
+            acc[almacen.codigoMedicamento].cantidadInicial += cantidadInicial;
+            return acc;
+          }, {});
+          
+          const formattedArray = Object.entries(groupedByAlmacen).map(([almacen, { cantidad, cantidadInicial, codigoMedicamento }]) => (
+            {
+              cantidad,
+              cantidadInicial,
+              codigoMedicamento: almacen,
             }
-        });
+          ));
 
-        const groupedByAlmacen = {};
-
-        medicamentosList.forEach(med => {
-            const { almacen, cantidad, cantidadInicial } = med;
-
-            if (!groupedByAlmacen[almacen]) {
-                groupedByAlmacen[almacen] = { cantidad: 0, cantidadInicial: 0 };
-            }
-
-            groupedByAlmacen[almacen].cantidad += cantidad;
-            groupedByAlmacen[almacen].cantidadInicial += cantidadInicial || 0;
-        });
-
-        res.status(200).json(groupedByAlmacen);
+        res.status(200).json(formattedArray);
     } catch (error) {
         console.error(error);
         res.status(500).json({ msg: 'Error al obtener los datos de los reportes.' });
