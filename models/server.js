@@ -50,6 +50,7 @@ class Server {
         this.app.use(this.routesPath + '/alertasAlmacen', require('../routes/alertasAlmacen'));
         this.app.use(this.routesPath + '/alertasInventario', require('../routes/alertasInventario'));
         this.app.use(this.routesPath + '/reportes', require('../routes/reportes'));
+        this.app.use(this.routesPath + '/reportesFarmacia', require('../routes/reportesFarmacia'));
     }
 
 }
