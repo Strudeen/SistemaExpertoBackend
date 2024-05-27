@@ -58,6 +58,7 @@ const postInventarioMedicamento = async (req, res) => {
             fechaCaducidad,
             codigoLaboratorio,
             cantidad,
+            cantidadInicial:cantidad,
             nroLote,
             inventarios: inventarioId
         });

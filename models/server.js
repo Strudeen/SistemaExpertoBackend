@@ -49,6 +49,7 @@ class Server {
         this.app.use(this.routesPath + '/compras', require('../routes/compras'));
         this.app.use(this.routesPath + '/alertasAlmacen', require('../routes/alertasAlmacen'));
         this.app.use(this.routesPath + '/alertasInventario', require('../routes/alertasInventario'));
+        this.app.use(this.routesPath + '/reportes', require('../routes/reportes'));
     }
 
 }

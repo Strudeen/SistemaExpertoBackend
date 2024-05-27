@@ -47,6 +47,7 @@ const postAlmacenMedicamento = async (req, res) => {
             fechaCaducidad,
             codigoLaboratorio,
             cantidad,
+            cantidadInicial:cantidad,
             nroLote,
             almacen: almacenId
         });

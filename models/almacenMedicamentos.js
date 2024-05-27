@@ -14,6 +14,10 @@ const AlmacenMedicamentoSchema = Schema({
         type: Number,
         required: true,
     },
+    cantidadInicial: {
+        type: Number,
+        required: true,
+    },
     nroLote: {
         type: String,
         required: true,
