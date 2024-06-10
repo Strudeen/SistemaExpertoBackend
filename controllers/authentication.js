@@ -12,7 +12,7 @@ const signIn = async (req, res) => {
         const user = await Usuario.findOne({ email: email });
 
         if (!user) {
-            return res.status(404).json({ msg: "Usuario con este correo no encontrado" });
+            return res.status(404).json({ msg: "Email o contraseña incorrecta" });
         } else {
             if (bcrypt.compareSync(password, user.password)) {
                 // Desestructurar el usuario quitando el Password
