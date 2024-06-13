@@ -1,6 +1,7 @@
 const { Schema, model } = require('mongoose');
 
-const RolesSchema = new Schema({
+const PermisosSchema = new Schema({
+    _id: Schema.Types.ObjectId,
     nombre: {
         type: String,
         required: true,
@@ -13,10 +14,10 @@ const RolesSchema = new Schema({
         type: Boolean,
         default: true
     },
-    permisos: [{
-        permisoId: { type: Schema.Types.ObjectId, ref: 'Permisos' },
+    roles: [{
+        roleId: { type: Schema.Types.ObjectId, ref: 'Roles' },
         estado: { type: Boolean, default: true }
     }]
 }, { timestamps: true });
 
-module.exports = model('Roles', RolesSchema);
+module.exports = model('Permisos', PermisosSchema);

@@ -20,7 +20,7 @@ module.exports = (req, res, next) => {
             } else {
                 
                 // Utilizar Mongoose para encontrar el usuario y sus roles
-                Usuario.findById(decoded.user.id).populate('roles').then(user => {
+                Usuario.findById(decoded.user._id).then(user => {
                     if (!user) {
                         return res.status(404).json({ msg: "Usuario no encontrado" });
                     }
