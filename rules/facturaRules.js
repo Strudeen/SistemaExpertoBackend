@@ -49,42 +49,18 @@ facturaEngine.addOperator('similarTo', (factValue, jsonValue) => {
 facturaEngine.addRule({
     conditions: {
         any: [{
-            fact: 'nombre1',
-            operator: 'similarTo',
-            value: {
-                value: 'agencia boliviana de energía nuclear', // valor esperado
-                threshold: 0.5 // umbral de similitud, ajustar según sea necesario
-            }
-        },{
-            fact: 'nombre2',
-            operator: 'similarTo',
-            value: {
-                value: 'agencia boliviana de energía nuclear', // valor esperado
-                threshold: 0.5 // umbral de similitud, ajustar según sea necesario
-            }
-        }]
-    },
-    event: {
-        type: 'validado',
-        params: {
-            message: 'El nombre es similar al esperado y está validado.'
-        }
-    }
-});
-facturaEngine.addRule({
-    conditions: {
-        all: [{
-            fact: 'anoFactura',
+            fact: 'validationValue',
             operator: 'equal',
-            value: '2023'
+            value: 100
         }]
     },
     event: {
-        type: 'fecha-validada',
+        type: 'ocrValidated',
         params: {
-            message: 'La fecha de la factura es del año 2023.'
+            message: 'El documento cuenta con la información correspondiente.'
         }
     }
 });
+
 
 module.exports = { facturaEngine };

@@ -35,26 +35,27 @@ class Server {
     }
 
     routes() {
-        this.app.use(this.routesPath + '/authentication',authentication, require('../routes/authentication'));
-        this.app.use(this.routesPath + '/medicamento',authentication, require('../routes/medicamento'));
-        this.app.use(this.routesPath + '/laboratorio',authentication, require('../routes/laboratorio'));
-        this.app.use(this.routesPath + '/paciente',authentication, require('../routes/paciente'));
-        this.app.use(this.routesPath + '/file',authentication, require('../routes/files'));
-        this.app.use(this.routesPath + '/rol',authentication, require('../routes/rol'));
-        this.app.use(this.routesPath + '/usuario',authentication, require('../routes/usuario'));
-        this.app.use(this.routesPath + '/inventario',authentication, require('../routes/inventario'));
-        this.app.use(this.routesPath + '/receta',authentication, require('../routes/receta'));
-        this.app.use(this.routesPath + '/almacen',authentication, require('../routes/almacen'));
-        this.app.use(this.routesPath + '/almacenMedicamento',authentication, require('../routes/almacenMedicamento'));
-        this.app.use(this.routesPath + '/inventarioMedicamento',authentication, require('../routes/inventarioMedicamento'));
-        this.app.use(this.routesPath + '/motorDeInferencia',authentication, require('../routes/motorDeInferencia'));
-        this.app.use(this.routesPath + '/pedidosInventario',authentication, require('../routes/pedidosInventario'));
-        this.app.use(this.routesPath + '/pedidosAlmacen',authentication, require('../routes/pedidosAlmacen'));
-        this.app.use(this.routesPath + '/compras',authentication, require('../routes/compras'));
-        this.app.use(this.routesPath + '/alertasAlmacen',authentication, require('../routes/alertasAlmacen'));
-        this.app.use(this.routesPath + '/alertasInventario',authentication, require('../routes/alertasInventario'));
-        this.app.use(this.routesPath + '/reportes',authentication, require('../routes/reportes'));
-        this.app.use(this.routesPath + '/reportesFarmacia',authentication, require('../routes/reportesFarmacia'));
+        this.app.use(this.routesPath + '/authentication', require('../routes/authentication'));
+        this.app.use(this.routesPath + '/institucion', require('../routes/institucion'));
+        this.app.use(this.routesPath + '/medicamento', require('../routes/medicamento'));
+        this.app.use(this.routesPath + '/laboratorio', require('../routes/laboratorio'));
+        this.app.use(this.routesPath + '/paciente', require('../routes/paciente'));
+        this.app.use(this.routesPath + '/file', require('../routes/files'));
+        this.app.use(this.routesPath + '/rol', require('../routes/rol'));
+        this.app.use(this.routesPath + '/usuario', require('../routes/usuario'));
+        this.app.use(this.routesPath + '/inventario', require('../routes/inventario'));
+        this.app.use(this.routesPath + '/receta', require('../routes/receta'));
+        this.app.use(this.routesPath + '/almacen', require('../routes/almacen'));
+        this.app.use(this.routesPath + '/almacenMedicamento', require('../routes/almacenMedicamento'));
+        this.app.use(this.routesPath + '/inventarioMedicamento', require('../routes/inventarioMedicamento'));
+        this.app.use(this.routesPath + '/motorDeInferencia', require('../routes/motorDeInferencia'));
+        this.app.use(this.routesPath + '/pedidosInventario', require('../routes/pedidosInventario'));
+        this.app.use(this.routesPath + '/pedidosAlmacen', require('../routes/pedidosAlmacen'));
+        this.app.use(this.routesPath + '/compras', require('../routes/compras'));
+        this.app.use(this.routesPath + '/alertasAlmacen', require('../routes/alertasAlmacen'));
+        this.app.use(this.routesPath + '/alertasInventario', require('../routes/alertasInventario'));
+        this.app.use(this.routesPath + '/reportes', require('../routes/reportes'));
+        this.app.use(this.routesPath + '/reportesFarmacia', require('../routes/reportesFarmacia'));
     }
 
 }

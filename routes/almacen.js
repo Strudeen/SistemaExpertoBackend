@@ -3,11 +3,11 @@ const { postAlmacen, getAlmacenes,getAlmacen, getAllAlmacenes, putAlmacen, delAl
 const rbacMiddleware = require("../middlewares/rbac");
  
 const router = Router();
-router.get('/',rbacMiddleware.checkPermission('listarAlamcen'), getAlmacenes);
-router.get('/:id',rbacMiddleware.checkPermission('listarAlamcen'), getAlmacen);
-router.post('/',rbacMiddleware.checkPermission('crearAlamcen'), postAlmacen);
-router.put('/:id',rbacMiddleware.checkPermission('editarAlamcen'), putAlmacen);
-router.delete('/:id',rbacMiddleware.checkPermission('eliminarAlamcen'), delAlmacen);
+router.get('/', getAlmacenes);
+router.get('/:id', getAlmacen);
+router.post('/', postAlmacen);
+router.put('/:id', putAlmacen);
+router.delete('/:id', delAlmacen);
 
 
 module.exports = router;

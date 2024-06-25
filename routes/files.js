@@ -5,6 +5,8 @@ const Grid = require('gridfs-stream');
 const crypto = require('crypto');
 const { Router } = require('express');
 const mongoURI = process.env.MONGODB_CNN;
+const upload = require("../middlewares/multerUpload"); 
+const { postFileValidation} = require("../controllers/motorDeInferencia");
 
 const conn = mongoose.createConnection(mongoURI);
 
@@ -36,16 +38,9 @@ const storage = new GridFsStorage({
     }
 });
 
-const upload = multer({ storage });
 const router = Router();
 
-router.post('/upload', upload.single('file'), (req, res) => { 
-    return res.json({
-        file: req.file,
-        status: true,
-        message: "El archivo ha sido registrado"
-    });
-});
+router.post('/upload/:typeDocument', upload.single('file'), postFileValidation);
 
 router.get('/:id', async (req, res) => {
 

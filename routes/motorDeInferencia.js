@@ -1,10 +1,9 @@
 const { Router } = require('express');
-const { postOCR, postOCRCertificadoEmpresa } = require('../controllers/motorDeInferencia');
+const { postFileValidation } = require('../controllers/motorDeInferencia');
 
 
 const router = Router();
-router.post('/', postOCR);
-router.post('/empresa', postOCRCertificadoEmpresa);
+router.post('/', postFileValidation);
 
 module.exports = router;
 

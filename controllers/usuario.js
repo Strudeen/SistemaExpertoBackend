@@ -106,4 +106,41 @@ const delUsuario = async (req = request, res = response) => {
   }
 }
 
-module.exports = { getUsuarios, postUsuario, putUsuario, getUsuario, delUsuario };
+const putUsuarioPassword = async (req = request, res = response) => {
+  const usuarioId = req.params.id;
+  const { password } = req.body;
+
+  try {
+    // Buscar el usuario por ID
+    const usuario = await Usuario.findById(usuarioId);
+
+    if (!usuario) {
+      return res.status(404).json({ msg: 'Usuario no encontrado' });
+    }
+
+    // Validar la nueva contraseña
+    if (!validatePassword(password)) {
+      return res.status(400).json({
+        msg: 'La contraseña debe tener entre 8 y 12 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula, un número y un carácter especial.'
+      });
+    }
+
+    // Cifrar la nueva contraseña
+    const passhash = await bcrypt.hash(password, 10);
+
+    // Actualizar la contraseña del usuario
+    usuario.password = passhash;
+
+    // Guardar los cambios
+    await usuario.save();
+
+    res.json({
+      msg: 'Contraseña actualizada exitosamente.',
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ msg: 'Error al actualizar la contraseña del usuario.' });
+  }
+}
+
+module.exports = { getUsuarios, postUsuario, putUsuario, getUsuario, delUsuario, putUsuarioPassword };

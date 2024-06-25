@@ -32,47 +32,9 @@ const actualizarEstadoPedido = async (req, res) => {
         await pedido.save();
 
         // Si el pedido se completa, añadir a inventario
-        console.log('PEDIDO MEDICAMENTOS', pedido.medicamentos);
         if (nuevoEstado === 'completado') {
-            for (let medicamento of pedido.medicamentos) {
-                const { codigoMedicamento, cantidadEntregada } = medicamento;
-              
-                // Obtener detalles adicionales del medicamento desde el almacén o una fuente externa
-                const detallesMedicamento = await AlmacenMedicamentos.findOne({ _id: medicamento.almacenMedicamentoId }).sort({ fechaCaducidad: 1 }); // Ejemplo: obtener el lote más próximo a caducar
-        
-                let inventario = await Inventarios.findOne({ codigoMedicamento });
-                if (!inventario) {
-                    inventario = new Inventarios({
-                        _id: new mongoose.Types.ObjectId(),
-                        codigoMedicamento,
-                        cantidad: cantidadEntregada,
-                        datos: []
-                    });
-                } else {
-                    inventario.cantidad += cantidadEntregada;
-                }
-        
-                // Crear un nuevo lote en InventarioMedicamentos
-                const nuevoInventarioMedicamento = new InventarioMedicamentos({
-                    _id: new mongoose.Types.ObjectId(),
-                    fechaCaducidad: detallesMedicamento.fechaCaducidad,
-                    codigoLaboratorio: detallesMedicamento.codigoLaboratorio,
-                    cantidad: cantidadEntregada,
-                    cantidadInicial: cantidadEntregada,
-                    nroLote: detallesMedicamento.nroLote,
-                    state: true,
-                    inventarios: inventario._id
-                });
-
-                console.log(' NUEVO INVENTARIO MEDICAMENTO', nuevoInventarioMedicamento);
-                await nuevoInventarioMedicamento.save();
-        
-                inventario.datos.push(nuevoInventarioMedicamento._id);
-       
-                await inventario.save();
-            }
+            await actualizarInventario(pedido.medicamentos);
         }
-        
 
         // Si el pedido se cancela, revertir las cantidades (similar a cancelarPedido)
         if (nuevoEstado === 'cancelado') {
@@ -85,6 +47,44 @@ const actualizarEstadoPedido = async (req, res) => {
     }
 };
 
+const actualizarInventario = async (medicamentos) => {
+    for (let medicamento of medicamentos) {
+        const { codigoMedicamento, cantidadEntregada, almacenMedicamentoId } = medicamento;
+      
+        // Obtener detalles adicionales del medicamento desde el almacén o una fuente externa
+        const detallesMedicamento = await AlmacenMedicamentos.findOne({ _id: almacenMedicamentoId }).sort({ fechaCaducidad: 1 });
+
+        let inventario = await Inventarios.findOne({ codigoMedicamento });
+        if (!inventario) {
+            inventario = new Inventarios({
+                _id: new mongoose.Types.ObjectId(),
+                codigoMedicamento,
+                cantidad: 0,
+                datos: []
+            });
+        }
+        
+        inventario.cantidad += cantidadEntregada;
+
+        // Crear un nuevo lote en InventarioMedicamentos
+        const nuevoInventarioMedicamento = new InventarioMedicamentos({
+            _id: new mongoose.Types.ObjectId(),
+            fechaCaducidad: detallesMedicamento.fechaCaducidad,
+            codigoLaboratorio: detallesMedicamento.codigoLaboratorio,
+            cantidad: cantidadEntregada,
+            cantidadInicial: cantidadEntregada,
+            nroLote: detallesMedicamento.nroLote,
+            state: true,
+            inventarios: inventario._id
+        });
+
+        await nuevoInventarioMedicamento.save();
+
+        inventario.datos.push(nuevoInventarioMedicamento._id);
+
+        await inventario.save();
+    }
+};
 
 
 

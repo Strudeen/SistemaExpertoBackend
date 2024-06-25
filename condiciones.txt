@@ -1,0 +1,22 @@
+-1 NIT ABEN
+-2 Nit LAB
+-4 Nombre ABEN
+-8 Lab Nombre
+-16 Fecha
+
+-1 Falta NIT
+-2 Falta NIT LAB
+-3 Falta NIT ABEN y Nit LAB
+-4 Falta Nombre ABEN
+-5 Falta NIT ABEN Falta Nombre ABEN
+-6 Falta Nombre ABEN y falta NIT LAB
+-7 Falta Nombre ABEN, Falta NIT ABEN y NIT LAB
+-8 Falta LAB Nombre
+-9 Falta Lab Nombre y NIT ABEN
+-10 FALTA Lab Nombre y NIT LAB
+-11 Falta Lab Nombre, NIT LAB, NIT ABEN
+-12 Falta Lab nombre, y Nombre ABEN
+-13 Falta Lab nombre, Nombre Aben y Nit Aben
+-14 Falta Lab nombre, Nombre Aben y nit LAB
+-15 Falta Lab nombre, Nombre Aben, nit LAB y nit ABEN
+-16 Falta Fecha

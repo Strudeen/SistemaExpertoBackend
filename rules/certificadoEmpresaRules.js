@@ -1,6 +1,5 @@
 const { Engine } = require('json-rules-engine')
 
-
 // Función de ayuda para calcular la distancia de Levenshtein
 function levenshteinDistance(a, b) {
     const matrix = [];
